@@ -411,7 +411,17 @@ async function selectUser(name,bg,fg){
   setTimeout(()=>{if(sharedInv.length)document.getElementById('main-input').focus();},200);
 }
 async function loadInventory(){
-  try{const data=await sbFetch('inventory?order=name.asc&limit=8000');sharedInv=data||[];renderInvPreview();updateBadges();}
+  try{
+    let all=[], from=0, chunk=1000;
+    while(true){
+      const batch=await sbFetch(`inventory?order=name.asc&limit=${chunk}&offset=${from}`);
+      if(!batch||batch.length===0)break;
+      all=all.concat(batch);
+      if(batch.length<chunk)break;
+      from+=chunk;
+    }
+    sharedInv=all;renderInvPreview();updateBadges();
+  }
   catch(e){console.error('재고 로드 실패',e);}
 }
 
