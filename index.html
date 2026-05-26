@@ -411,7 +411,7 @@ async function selectUser(name,bg,fg){
   setTimeout(()=>{if(sharedInv.length)document.getElementById('main-input').focus();},200);
 }
 async function loadInventory(){
-  try{const data=await sbFetch('inventory?order=name.asc&limit=5000');sharedInv=data||[];renderInvPreview();updateBadges();}
+  try{const data=await sbFetch('inventory?order=name.asc&limit=8000');sharedInv=data||[];renderInvPreview();updateBadges();}
   catch(e){console.error('재고 로드 실패',e);}
 }
 
@@ -734,7 +734,7 @@ function renderInvPreview(){
   if(!sharedInv.length){document.getElementById('inv-preview').style.display='none';return;}
   document.getElementById('inv-total').textContent=sharedInv.length;
   document.getElementById('inv-qty').textContent=sharedInv.reduce((s,i)=>s+(i.qty||0),0).toLocaleString();
-  document.getElementById('inv-list').innerHTML=sharedInv.slice(0,300).map(i=>`<div class="li"><span class="mono" style="color:var(--text2);min-width:60px">${i.code}</span><span style="flex:1">${i.name}${i.option?` <span style="opacity:.6">${i.option}</span>`:''}</span>${i.barcode?'<span class="mono" style="font-size:11px;color:var(--text3)">'+i.barcode+'</span>':'<span class="badge warn" style="font-size:10px">바코드없음</span>'}<span style="font-weight:600;min-width:28px;text-align:right">${i.qty}</span></div>`).join('');
+  document.getElementById('inv-list').innerHTML=sharedInv.map(i=>`<div class="li"><span class="mono" style="color:var(--text2);min-width:60px">${i.code}</span><span style="flex:1">${i.name}${i.option?` <span style="opacity:.6">${i.option}</span>`:''}</span>${i.barcode?'<span class="mono" style="font-size:11px;color:var(--text3)">'+i.barcode+'</span>':'<span class="badge warn" style="font-size:10px">바코드없음</span>'}<span style="font-weight:600;min-width:28px;text-align:right">${i.qty}</span></div>`).join('');
   document.getElementById('inv-preview').style.display='';
 }
 
